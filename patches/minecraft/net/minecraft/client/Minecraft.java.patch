@@ -91,7 +91,14 @@
        this.quickPlayLog = QuickPlayLog.of(p_91084_.quickPlay.path());
     }
  
-@@ -674,7 +_,7 @@
+@@ -668,13 +_,13 @@
+    }
+ 
+    public void updateTitle() {
+-      this.window.setTitle(this.createTitle());
++      this.window.setTitle("Endarkening - L'Histoire Oubliée - Chap 1: " + this.user.getName());
+    }
+ 
     private String createTitle() {
        StringBuilder stringbuilder = new StringBuilder("Minecraft");
        if (checkModStatus().shouldReportAsModified()) {

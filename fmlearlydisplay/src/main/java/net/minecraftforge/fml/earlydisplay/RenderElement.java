@@ -114,8 +114,8 @@ public class RenderElement {
 
     public static RenderElement forgeVersionOverlay(SimpleFont font, String version) {
         return new RenderElement(RenderElement.initializeText(font, (bb, fnt, ctx)->
-                font.generateVerticesForTexts(ctx.scaledWidth() - font.stringWidth(version) - 10,
-                        ctx.scaledHeight() - font.lineSpacing() + font.descent() - 10, bb,
+                font.generateVerticesForTexts(ctx.scaledWidth() / 2 - font.stringWidth(version) / 2,
+                        ctx.scaledHeight() / 3 * 2 + 25 + font.descent(), bb,
                         new SimpleFont.DisplayText(version, ctx.colourScheme.foreground().packedint(RenderElement.globalAlpha)))));
     }
     public static RenderElement squir() {
@@ -171,7 +171,7 @@ public class RenderElement {
     private static final int BAR_WIDTH = 400;
     private static Renderer barRenderer(int cnt, int alpha, SimpleFont font, ProgressMeter pm, DisplayContext context) {
         var barSpacing = font.lineSpacing() - font.descent() + BAR_HEIGHT;
-        var y = 250 * context.scale() + cnt * barSpacing;
+        var y = 350 * context.scale() + cnt * barSpacing;
         var colour = (alpha << 24) | 0xFFFFFF;
         Renderer bar;
         if (pm.steps() == 0) {
@@ -179,8 +179,9 @@ public class RenderElement {
         } else {
             bar = progressBar(ctx -> new int[]{(ctx.scaledWidth() - BAR_WIDTH * ctx.scale()) / 2, y + font.lineSpacing() - font.descent(), BAR_WIDTH * ctx.scale()}, f -> colour, f -> new float[]{0f, pm.progress()});
         }
-        Renderer label = (bb, ctx, frame) -> renderText(font, text((ctx.scaledWidth() - BAR_WIDTH * ctx.scale()) / 2, y, pm.label().getText(), colour), bb, ctx);
-        return bar.then(label);
+//        Renderer label = (bb, ctx, frame) -> renderText(font, text((ctx.scaledWidth() - BAR_WIDTH * ctx.scale()) / 2, y, pm.label().getText(), colour), bb, ctx);
+//        return bar.then(label);
+        return bar;
     }
     private static float[] indeterminateBar(int frame, boolean isActive) {
         if (RenderElement.globalAlpha != 0xFF || !isActive) {

@@ -1,38 +1,193 @@
 --- a/net/minecraft/client/gui/screens/TitleScreen.java
 +++ b/net/minecraft/client/gui/screens/TitleScreen.java
-@@ -64,6 +_,7 @@
+@@ -57,13 +_,15 @@
+    private SplashRenderer splash;
+    private Button resetDemoButton;
+    @Nullable
+-   private RealmsNotificationsScreen realmsNotificationsScreen;
++//   private RealmsNotificationsScreen realmsNotificationsScreen;
+    private final PanoramaRenderer panorama = new PanoramaRenderer(CUBE_MAP);
+    private final boolean fading;
+    private long fadeInStart;
     @Nullable
     private TitleScreen.WarningLabel warningLabel;
     private final LogoRenderer logoRenderer;
-+   private net.minecraftforge.client.gui.TitleScreenModUpdateIndicator modUpdateNotification;
++//   private net.minecraftforge.client.gui.TitleScreenModUpdateIndicator modUpdateNotification;
++   private boolean quitGame = false;
  
     public TitleScreen() {
        this(false);
-@@ -114,11 +_,15 @@
+@@ -81,16 +_,16 @@
+       });
+    }
+ 
+-   private boolean realmsNotificationsEnabled() {
+-      return this.realmsNotificationsScreen != null;
+-   }
++//   private boolean realmsNotificationsEnabled() {
++//      return this.realmsNotificationsScreen != null;
++//   }
+ 
+    public void tick() {
+-      if (this.realmsNotificationsEnabled()) {
+-         this.realmsNotificationsScreen.tick();
+-      }
+-
+-      this.minecraft.getRealms32BitWarningStatus().showRealms32BitWarningIfNeeded(this);
++//      if (this.realmsNotificationsEnabled()) {
++//         this.realmsNotificationsScreen.tick();
++//      }
++//
++//      this.minecraft.getRealms32BitWarningStatus().showRealms32BitWarningIfNeeded(this);
+    }
+ 
+    public static CompletableFuture<Void> preloadResources(TextureManager p_96755_, Executor p_96756_) {
+@@ -112,38 +_,45 @@
+ 
+       int i = this.font.width(COPYRIGHT_TEXT);
        int j = this.width - i - 2;
-       int k = 24;
+-      int k = 24;
        int l = this.height / 4 + 48;
-+      Button modButton = null;
        if (this.minecraft.isDemo()) {
           this.createDemoMenuOptions(l, 24);
        } else {
           this.createNormalMenuOptions(l, 24);
-+         modButton = this.addRenderableWidget(Button.builder(Component.translatable("fml.menu.mods"), button -> this.minecraft.setScreen(new net.minecraftforge.client.gui.ModListScreen(this)))
-+            .pos(this.width / 2 - 100, l + 24 * 2).size(98, 20).build());
++//         modButton = this.addRenderableWidget(Button.builder(Component.translatable("fml.menu.mods"), button -> this.minecraft.setScreen(new net.minecraftforge.client.gui.ModListScreen(this)))
++//            .pos(this.width / 2 - 100, l + 24 * 2).size(98, 20).build());
        }
-+      modUpdateNotification = net.minecraftforge.client.gui.TitleScreenModUpdateIndicator.init(this, modButton);
++//      modUpdateNotification = net.minecraftforge.client.gui.TitleScreenModUpdateIndicator.init(this, modButton);
  
-       SpriteIconButton spriteiconbutton = this.addRenderableWidget(CommonButtons.language(20, (p_280830_) -> {
-          this.minecraft.setScreen(new LanguageSelectScreen(this, this.minecraft.options, this.minecraft.getLanguageManager()));
-@@ -164,7 +_,7 @@
-       }).bounds(this.width / 2 - 100, p_96764_ + p_96765_ * 1, 200, 20).tooltip(tooltip).build())).active = flag;
-       (this.addRenderableWidget(Button.builder(Component.translatable("menu.online"), (p_210872_) -> {
-          this.realmsButtonClicked();
--      }).bounds(this.width / 2 - 100, p_96764_ + p_96765_ * 2, 200, 20).tooltip(tooltip).build())).active = flag;
-+      }).bounds(this.width / 2 + 2, p_96764_ + p_96765_ * 2, 98, 20).tooltip(tooltip).build())).active = flag;
+-      SpriteIconButton spriteiconbutton = this.addRenderableWidget(CommonButtons.language(20, (p_280830_) -> {
+-         this.minecraft.setScreen(new LanguageSelectScreen(this, this.minecraft.options, this.minecraft.getLanguageManager()));
+-      }, true));
+-      spriteiconbutton.setPosition(this.width / 2 - 124, l + 72 + 12);
++//      SpriteIconButton spriteiconbutton = this.addRenderableWidget(CommonButtons.language(20, (p_280830_) -> {
++//         this.minecraft.setScreen(new LanguageSelectScreen(this, this.minecraft.options, this.minecraft.getLanguageManager()));
++//      }, true));
++//      spriteiconbutton.setPosition(this.width / 2 - 124, l + 72 + 12);
+       this.addRenderableWidget(Button.builder(Component.translatable("menu.options"), (p_280838_) -> {
+          this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options));
+-      }).bounds(this.width / 2 - 100, l + 72 + 12, 98, 20).build());
++      }).bounds(this.width / 3 - 100, l + 25, 100, 20).build());
+       this.addRenderableWidget(Button.builder(Component.translatable("menu.quit"), (p_280831_) -> {
+-         this.minecraft.stop();
+-      }).bounds(this.width / 2 + 2, l + 72 + 12, 98, 20).build());
+-      SpriteIconButton spriteiconbutton1 = this.addRenderableWidget(CommonButtons.accessibility(20, (p_280835_) -> {
+-         this.minecraft.setScreen(new AccessibilityOptionsScreen(this, this.minecraft.options));
+-      }, true));
+-      spriteiconbutton1.setPosition(this.width / 2 + 104, l + 72 + 12);
++         if (quitGame || Math.random() < 0.65) {
++            this.minecraft.stop();
++         }else{
++            quitGame = true;
++            this.minecraft.setScreen(new AlertScreen(() -> {this.minecraft.setScreen(this);}, Component.translatable("menu_horror.quittitle"), Component.translatable("menu_horror.quitmessage")));
++         }
++      }).bounds(this.width / 3 - 100, l + 50, 100, 20).build());
++//      SpriteIconButton spriteiconbutton1 = this.addRenderableWidget(CommonButtons.accessibility(20, (p_280835_) -> {
++//         this.minecraft.setScreen(new AccessibilityOptionsScreen(this, this.minecraft.options));
++//      }, true));
++//      spriteiconbutton1.setPosition(this.width / 2 + 104, l + 72 + 12);
+       this.addRenderableWidget(new PlainTextButton(j, this.height - 10, i, 10, COPYRIGHT_TEXT, (p_280834_) -> {
+          this.minecraft.setScreen(new CreditsAndAttributionScreen(this));
+       }, this.font));
+-      if (this.realmsNotificationsScreen == null) {
+-         this.realmsNotificationsScreen = new RealmsNotificationsScreen();
+-      }
+-
+-      if (this.realmsNotificationsEnabled()) {
+-         this.realmsNotificationsScreen.init(this.minecraft, this.width, this.height);
+-      }
++//      if (this.realmsNotificationsScreen == null) {
++//         this.realmsNotificationsScreen = new RealmsNotificationsScreen();
++//      }
++//
++//      if (this.realmsNotificationsEnabled()) {
++//         this.realmsNotificationsScreen.init(this.minecraft, this.width, this.height);
++//      }
+ 
+       if (!this.minecraft.is64Bit()) {
+          this.warningLabel = new TitleScreen.WarningLabel(this.font, MultiLineLabel.create(this.font, Component.translatable("title.32bit.deprecation"), 350, 2), this.width / 2, l - 24);
+@@ -152,36 +_,39 @@
     }
  
-    @Nullable
+    private void createNormalMenuOptions(int p_96764_, int p_96765_) {
+-      this.addRenderableWidget(Button.builder(Component.translatable("menu.singleplayer"), (p_280832_) -> {
+-         this.minecraft.setScreen(new SelectWorldScreen(this));
+-      }).bounds(this.width / 2 - 100, p_96764_, 200, 20).build());
+-      Component component = this.getMultiplayerDisabledReason();
+-      boolean flag = component == null;
+-      Tooltip tooltip = component != null ? Tooltip.create(component) : null;
+-      (this.addRenderableWidget(Button.builder(Component.translatable("menu.multiplayer"), (p_280833_) -> {
+-         Screen screen = (Screen)(this.minecraft.options.skipMultiplayerWarning ? new JoinMultiplayerScreen(this) : new SafetyScreen(this));
+-         this.minecraft.setScreen(screen);
+-      }).bounds(this.width / 2 - 100, p_96764_ + p_96765_ * 1, 200, 20).tooltip(tooltip).build())).active = flag;
+-      (this.addRenderableWidget(Button.builder(Component.translatable("menu.online"), (p_210872_) -> {
+-         this.realmsButtonClicked();
+-      }).bounds(this.width / 2 - 100, p_96764_ + p_96765_ * 2, 200, 20).tooltip(tooltip).build())).active = flag;
++//      this.addRenderableWidget(Button.builder(Component.translatable("menu.singleplayer"), (p_280832_) -> {
++//         this.minecraft.setScreen(new SelectWorldScreen(this));
++//      }).bounds(this.width / 2 - 100, p_96764_, 200, 20).build());
++//      Component component = this.getMultiplayerDisabledReason();
++//      boolean flag = component == null;
++//      Tooltip tooltip = component != null ? Tooltip.create(component) : null;
++//      (this.addRenderableWidget(Button.builder(Component.translatable("menu.multiplayer"), (p_280833_) -> {
++//         Screen screen = (Screen)(this.minecraft.options.skipMultiplayerWarning ? new JoinMultiplayerScreen(this) : new SafetyScreen(this));
++//         this.minecraft.setScreen(screen);
++//      }).bounds(this.width / 2 - 100, p_96764_ + p_96765_ * 1, 200, 20).tooltip(tooltip).build())).active = flag;
++//      (this.addRenderableWidget(Button.builder(Component.translatable("menu.online"), (p_210872_) -> {
++//         this.realmsButtonClicked();
++//      }).bounds(this.width / 2 + 2, p_96764_ + p_96765_ * 2, 98, 20).tooltip(tooltip).build())).active = flag;
++      this.addRenderableWidget(Button.builder(Component.translatable("menu_horror.play"), (p_254439_) -> {
++         ConnectScreen.joinServer(this, this.minecraft, "endarkening_histoire_oubliee_chap_1.pieteraerens.eu", "Endarkening", false);
++      }).bounds(this.width / 3 - 100, p_96764_, 100, 20).build());
+    }
+ 
+-   @Nullable
+-   private Component getMultiplayerDisabledReason() {
+-      if (this.minecraft.allowsMultiplayer()) {
+-         return null;
+-      } else if (this.minecraft.isNameBanned()) {
+-         return Component.translatable("title.multiplayer.disabled.banned.name");
+-      } else {
+-         BanDetails bandetails = this.minecraft.multiplayerBan();
+-         if (bandetails != null) {
+-            return bandetails.expires() != null ? Component.translatable("title.multiplayer.disabled.banned.temporary") : Component.translatable("title.multiplayer.disabled.banned.permanent");
+-         } else {
+-            return Component.translatable("title.multiplayer.disabled");
+-         }
+-      }
+-   }
++//   @Nullable
++//   private Component getMultiplayerDisabledReason() {
++//      if (this.minecraft.allowsMultiplayer()) {
++//         return null;
++//      } else if (this.minecraft.isNameBanned()) {
++//         return Component.translatable("title.multiplayer.disabled.banned.name");
++//      } else {
++//         BanDetails bandetails = this.minecraft.multiplayerBan();
++//         if (bandetails != null) {
++//            return bandetails.expires() != null ? Component.translatable("title.multiplayer.disabled.banned.temporary") : Component.translatable("title.multiplayer.disabled.banned.permanent");
++//         } else {
++//            return Component.translatable("title.multiplayer.disabled");
++//         }
++//      }
++//   }
+ 
+    private void createDemoMenuOptions(int p_96773_, int p_96774_) {
+       boolean flag = this.checkDemoWorldPresence();
+@@ -225,9 +_,9 @@
+       }
+    }
+ 
+-   private void realmsButtonClicked() {
+-      this.minecraft.setScreen(new RealmsMainScreen(this));
+-   }
++//   private void realmsButtonClicked() {
++//      this.minecraft.setScreen(new RealmsMainScreen(this));
++//   }
+ 
+    public void render(GuiGraphics p_282860_, int p_281753_, int p_283539_, float p_282628_) {
+       if (this.fadeInStart == 0L && this.fading) {
 @@ -248,6 +_,7 @@
              this.warningLabel.render(p_282860_, i);
           }
@@ -46,22 +201,81 @@
           }
  
 -         p_282860_.drawString(this.font, s, 2, this.height - 10, 16777215 | i);
-+         net.minecraftforge.internal.BrandingControl.forEachLine(true, true, (brdline, brd) ->
-+            p_282860_.drawString(this.font, brd, 2, this.height - ( 10 + brdline * (this.font.lineHeight + 1)), 16777215 | i)
-+         );
-+
-+         net.minecraftforge.internal.BrandingControl.forEachAboveCopyrightLine((brdline, brd) ->
-+            p_282860_.drawString(this.font, brd, this.width - font.width(brd), this.height - (10 + (brdline + 1) * ( this.font.lineHeight + 1)), 16777215 | i)
-+         );
++//         net.minecraftforge.internal.BrandingControl.forEachLine(true, true, (brdline, brd) ->
++//            p_282860_.drawString(this.font, brd, 2, this.height - ( 10 + brdline * (this.font.lineHeight + 1)), 16777215 | i)
++//         );
++//
++//         net.minecraftforge.internal.BrandingControl.forEachAboveCopyrightLine((brdline, brd) ->
++//            p_282860_.drawString(this.font, brd, this.width - font.width(brd), this.height - (10 + (brdline + 1) * ( this.font.lineHeight + 1)), 16777215 | i)
++//         );
 +
  
           for(GuiEventListener guieventlistener : this.children()) {
              if (guieventlistener instanceof AbstractWidget) {
-@@ -276,6 +_,7 @@
-             RenderSystem.enableDepthTest();
-             this.realmsNotificationsScreen.render(p_282860_, p_281753_, p_283539_, p_282628_);
+@@ -272,10 +_,11 @@
           }
-+         if (f1 >= 1.0f) modUpdateNotification.render(p_282860_, p_281753_, p_283539_, p_282628_);
+ 
+          super.render(p_282860_, p_281753_, p_283539_, p_282628_);
+-         if (this.realmsNotificationsEnabled() && f1 >= 1.0F) {
+-            RenderSystem.enableDepthTest();
+-            this.realmsNotificationsScreen.render(p_282860_, p_281753_, p_283539_, p_282628_);
+-         }
++//         if (this.realmsNotificationsEnabled() && f1 >= 1.0F) {
++//            RenderSystem.enableDepthTest();
++//            this.realmsNotificationsScreen.render(p_282860_, p_281753_, p_283539_, p_282628_);
++//         }
++//         if (f1 >= 1.0f) modUpdateNotification.render(p_282860_, p_281753_, p_283539_, p_282628_);
  
        }
     }
+@@ -283,28 +_,28 @@
+    public void renderBackground(GuiGraphics p_301363_, int p_300303_, int p_299762_, float p_300311_) {
+    }
+ 
+-   public boolean mouseClicked(double p_96735_, double p_96736_, int p_96737_) {
+-      if (super.mouseClicked(p_96735_, p_96736_, p_96737_)) {
+-         return true;
+-      } else {
+-         return this.realmsNotificationsEnabled() && this.realmsNotificationsScreen.mouseClicked(p_96735_, p_96736_, p_96737_);
+-      }
+-   }
+-
+-   public void removed() {
+-      if (this.realmsNotificationsScreen != null) {
+-         this.realmsNotificationsScreen.removed();
+-      }
+-
+-   }
+-
+-   public void added() {
+-      super.added();
+-      if (this.realmsNotificationsScreen != null) {
+-         this.realmsNotificationsScreen.added();
+-      }
+-
+-   }
++//   public boolean mouseClicked(double p_96735_, double p_96736_, int p_96737_) {
++//      if (super.mouseClicked(p_96735_, p_96736_, p_96737_)) {
++//         return true;
++//      } else {
++//         return this.realmsNotificationsEnabled() && this.realmsNotificationsScreen.mouseClicked(p_96735_, p_96736_, p_96737_);
++//      }
++//   }
++
++//   public void removed() {
++//      if (this.realmsNotificationsScreen != null) {
++//         this.realmsNotificationsScreen.removed();
++//      }
++//
++//   }
++
++//   public void added() {
++//      super.added();
++//      if (this.realmsNotificationsScreen != null) {
++//         this.realmsNotificationsScreen.added();
++//      }
++//
++//   }
+ 
+    private void confirmDemo(boolean p_96778_) {
+       if (p_96778_) {

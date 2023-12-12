@@ -1,5 +1,16 @@
 --- a/net/minecraft/client/gui/screens/ConnectScreen.java
 +++ b/net/minecraft/client/gui/screens/ConnectScreen.java
+@@ -53,6 +_,10 @@
+       this.connectFailedTitle = p_279228_;
+    }
+ 
++   public static void joinServer(Screen p_279473_, Minecraft p_279200_, String ip, String name, boolean p_279117_){
++      startConnecting(p_279473_, p_279200_, ServerAddress.parseString(ip), new ServerData(name, ip, ServerData.Type.OTHER), p_279117_);
++   }
++
+    public static void startConnecting(Screen p_279473_, Minecraft p_279200_, ServerAddress p_279150_, ServerData p_279481_, boolean p_279117_) {
+       if (p_279200_.screen instanceof ConnectScreen) {
+          LOGGER.error("Attempt to connect while already connecting");
 @@ -84,6 +_,8 @@
                 }
  

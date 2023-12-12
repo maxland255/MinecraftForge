@@ -1,5 +1,47 @@
 --- a/net/minecraft/client/Options.java
 +++ b/net/minecraft/client/Options.java
+@@ -90,7 +_,7 @@
+    private static final float DEFAULT_VOLUME = 1.0F;
+    public static final String DEFAULT_SOUND_DEVICE = "";
+    private static final Component ACCESSIBILITY_TOOLTIP_DARK_MOJANG_BACKGROUND = Component.translatable("options.darkMojangStudiosBackgroundColor.tooltip");
+-   private final OptionInstance<Boolean> darkMojangStudiosBackground = OptionInstance.createBoolean("options.darkMojangStudiosBackgroundColor", OptionInstance.cachedConstantTooltip(ACCESSIBILITY_TOOLTIP_DARK_MOJANG_BACKGROUND), false);
++   private final OptionInstance<Boolean> darkMojangStudiosBackground = OptionInstance.createBoolean("options.darkMojangStudiosBackgroundColor", OptionInstance.cachedConstantTooltip(ACCESSIBILITY_TOOLTIP_DARK_MOJANG_BACKGROUND), true);
+    private static final Component ACCESSIBILITY_TOOLTIP_HIDE_LIGHTNING_FLASHES = Component.translatable("options.hideLightningFlashes.tooltip");
+    private final OptionInstance<Boolean> hideLightningFlash = OptionInstance.createBoolean("options.hideLightningFlashes", OptionInstance.cachedConstantTooltip(ACCESSIBILITY_TOOLTIP_HIDE_LIGHTNING_FLASHES), false);
+    private final OptionInstance<Double> sensitivity = new OptionInstance<>("options.sensitivity", OptionInstance.noTooltip(), (p_232096_, p_232097_) -> {
+@@ -226,7 +_,7 @@
+    private final OptionInstance<Boolean> narratorHotkey = OptionInstance.createBoolean("options.accessibility.narrator_hotkey", OptionInstance.cachedConstantTooltip(Component.translatable("options.accessibility.narrator_hotkey.tooltip")), true);
+    @Nullable
+    public String fullscreenVideoModeString;
+-   public boolean hideServerAddress;
++   public boolean hideServerAddress = true;
+    public boolean advancedItemTooltips;
+    public boolean pauseOnLostFocus = true;
+    private final Set<PlayerModelPart> modelParts = EnumSet.allOf(PlayerModelPart.class);
+@@ -324,9 +_,9 @@
+    });
+    private final OptionInstance<Boolean> invertYMouse = OptionInstance.createBoolean("options.invertMouse", false);
+    private final OptionInstance<Boolean> discreteMouseScroll = OptionInstance.createBoolean("options.discrete_mouse_scroll", false);
+-   private final OptionInstance<Boolean> realmsNotifications = OptionInstance.createBoolean("options.realmsNotifications", true);
+-   private static final Component ALLOW_SERVER_LISTING_TOOLTIP = Component.translatable("options.allowServerListing.tooltip");
+-   private final OptionInstance<Boolean> allowServerListing = OptionInstance.createBoolean("options.allowServerListing", OptionInstance.cachedConstantTooltip(ALLOW_SERVER_LISTING_TOOLTIP), true, (p_232022_) -> {
++   private final OptionInstance<Boolean> realmsNotifications = OptionInstance.createBoolean("options.realmsNotifications", false);
++   private static final Component ALLOW_SERVER_LISTING_TOOLTIP = Component.translatable("options.allowServerListing.tooltip", false);
++   private final OptionInstance<Boolean> allowServerListing = OptionInstance.createBoolean("options.allowServerListing", OptionInstance.cachedConstantTooltip(ALLOW_SERVER_LISTING_TOOLTIP), false, (p_232022_) -> {
+       this.broadcastOptions();
+    });
+    private final OptionInstance<Boolean> reducedDebugInfo = OptionInstance.createBoolean("options.reducedDebugInfo", false);
+@@ -370,8 +_,8 @@
+       return p_231911_ ? MOVEMENT_TOGGLE : MOVEMENT_HOLD;
+    }, OptionInstance.BOOLEAN_VALUES, false, (p_261689_) -> {
+    });
+-   public boolean skipMultiplayerWarning;
+-   public boolean skipRealms32bitWarning;
++   public boolean skipMultiplayerWarning = true;
++   public boolean skipRealms32bitWarning = true;
+    private static final Component CHAT_TOOLTIP_HIDE_MATCHED_NAMES = Component.translatable("options.hideMatchedNames.tooltip");
+    private final OptionInstance<Boolean> hideMatchedNames = OptionInstance.createBoolean("options.hideMatchedNames", OptionInstance.cachedConstantTooltip(CHAT_TOOLTIP_HIDE_MATCHED_NAMES), true);
+    private final OptionInstance<Boolean> showAutosaveIndicator = OptionInstance.createBoolean("options.autosaveIndicator", true);
 @@ -507,7 +_,8 @@
     }, new OptionInstance.LazyEnum<>(() -> {
        return Stream.concat(Stream.of(""), Minecraft.getInstance().getSoundManager().getAvailableSoundDevices().stream()).toList();
@@ -18,9 +60,72 @@
        this.minecraft = p_92138_;
        this.optionsFile = new File(p_92139_, "options.txt");
        boolean flag = p_92138_.is64Bit();
-@@ -957,11 +_,20 @@
+@@ -881,7 +_,7 @@
+       p_168428_.process("forceUnicodeFont", this.forceUnicodeFont);
+       p_168428_.process("discrete_mouse_scroll", this.discreteMouseScroll);
+       p_168428_.process("invertYMouse", this.invertYMouse);
+-      p_168428_.process("realmsNotifications", this.realmsNotifications);
++//      p_168428_.process("realmsNotifications", this.realmsNotifications);
+       p_168428_.process("reducedDebugInfo", this.reducedDebugInfo);
+       p_168428_.process("showSubtitles", this.showSubtitles);
+       p_168428_.process("directionalAudio", this.directionalAudio);
+@@ -890,7 +_,7 @@
+       p_168428_.process("bobView", this.bobView);
+       p_168428_.process("toggleCrouch", this.toggleCrouch);
+       p_168428_.process("toggleSprint", this.toggleSprint);
+-      p_168428_.process("darkMojangStudiosBackground", this.darkMojangStudiosBackground);
++//      p_168428_.process("darkMojangStudiosBackground", this.darkMojangStudiosBackground);
+       p_168428_.process("hideLightningFlashes", this.hideLightningFlash);
+       p_168428_.process("mouseSensitivity", this.sensitivity);
+       p_168428_.process("fov", this.fov);
+@@ -902,7 +_,7 @@
+       p_168428_.process("damageTiltStrength", this.damageTiltStrength);
+       p_168428_.process("highContrast", this.highContrast);
+       p_168428_.process("narratorHotkey", this.narratorHotkey);
+-      p_168428_.process("gamma", this.gamma);
++//      p_168428_.process("gamma", this.gamma);
+       p_168428_.process("renderDistance", this.renderDistance);
+       p_168428_.process("simulationDistance", this.simulationDistance);
+       p_168428_.process("entityDistanceScaling", this.entityDistanceScaling);
+@@ -916,7 +_,7 @@
+       p_168428_.process("renderClouds", this.cloudStatus);
+       this.resourcePacks = p_168428_.process("resourcePacks", this.resourcePacks, Options::readListOfStrings, GSON::toJson);
+       this.incompatibleResourcePacks = p_168428_.process("incompatibleResourcePacks", this.incompatibleResourcePacks, Options::readListOfStrings, GSON::toJson);
+-      this.lastMpIp = p_168428_.process("lastServer", this.lastMpIp);
++//      this.lastMpIp = p_168428_.process("lastServer", this.lastMpIp);
+       this.languageCode = p_168428_.process("lang", this.languageCode);
+       p_168428_.process("soundDevice", this.soundDevice);
+       p_168428_.process("chatVisibility", this.chatVisibility);
+@@ -924,7 +_,7 @@
+       p_168428_.process("chatLineSpacing", this.chatLineSpacing);
+       p_168428_.process("textBackgroundOpacity", this.textBackgroundOpacity);
+       p_168428_.process("backgroundForChatOnly", this.backgroundForChatOnly);
+-      this.hideServerAddress = p_168428_.process("hideServerAddress", this.hideServerAddress);
++//      this.hideServerAddress = p_168428_.process("hideServerAddress", this.hideServerAddress);
+       this.advancedItemTooltips = p_168428_.process("advancedItemTooltips", this.advancedItemTooltips);
+       this.pauseOnLostFocus = p_168428_.process("pauseOnLostFocus", this.pauseOnLostFocus);
+       this.overrideWidth = p_168428_.process("overrideWidth", this.overrideWidth);
+@@ -944,24 +_,33 @@
+       p_168428_.process("mouseWheelSensitivity", this.mouseWheelSensitivity);
+       p_168428_.process("rawMouseInput", this.rawMouseInput);
+       this.glDebugVerbosity = p_168428_.process("glDebugVerbosity", this.glDebugVerbosity);
+-      this.skipMultiplayerWarning = p_168428_.process("skipMultiplayerWarning", this.skipMultiplayerWarning);
+-      this.skipRealms32bitWarning = p_168428_.process("skipRealms32bitWarning", this.skipRealms32bitWarning);
++//      this.skipMultiplayerWarning = p_168428_.process("skipMultiplayerWarning", this.skipMultiplayerWarning);
++//      this.skipRealms32bitWarning = p_168428_.process("skipRealms32bitWarning", this.skipRealms32bitWarning);
+       p_168428_.process("hideMatchedNames", this.hideMatchedNames);
+-      this.joinedFirstServer = p_168428_.process("joinedFirstServer", this.joinedFirstServer);
++//      this.joinedFirstServer = p_168428_.process("joinedFirstServer", this.joinedFirstServer);
+       this.hideBundleTutorial = p_168428_.process("hideBundleTutorial", this.hideBundleTutorial);
+       this.syncWrites = p_168428_.process("syncChunkWrites", this.syncWrites);
+       p_168428_.process("showAutosaveIndicator", this.showAutosaveIndicator);
+-      p_168428_.process("allowServerListing", this.allowServerListing);
++//      p_168428_.process("allowServerListing", this.allowServerListing);
+       p_168428_.process("onlyShowSecureChat", this.onlyShowSecureChat);
+       p_168428_.process("panoramaScrollSpeed", this.panoramaSpeed);
        p_168428_.process("telemetryOptInExtra", this.telemetryOptInExtra);
-       this.onboardAccessibility = p_168428_.process("onboardAccessibility", this.onboardAccessibility);
+-      this.onboardAccessibility = p_168428_.process("onboardAccessibility", this.onboardAccessibility);
++//      this.onboardAccessibility = p_168428_.process("onboardAccessibility", this.onboardAccessibility);
  
 +      processOptionsForge(p_168428_);
 +   }

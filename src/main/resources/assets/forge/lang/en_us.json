@@ -226,5 +226,11 @@
 
   "forge.chatType.system": "{0}",
 
-  "pack.forge.description": "Forge resource pack"
+  "pack.forge.description": "Forge resource pack",
+
+  "menu_horror.play": "Play",
+  "menu_horror.quittitle": "Ohh noo",
+  "menu_horror.quitmessage": "Try again, maybe now it'll go away 😈",
+  "menu_horror.warning.message": ", WARNING: This Minecraft server contains game elements that may be disturbing. If you have a medical history such as epilepsy, severe anxiety, or are sensitive to horrific content, we advise you not to play Endarkening. Jumping, loud noises and disturbing images may be present in the game, and we are not responsible for any negative reactions this may cause.\nPlay at your own risk, and be sure to take breaks if necessary.",
+  "menu_horror.warning.narrator.message": "Press enter to continue"
 }

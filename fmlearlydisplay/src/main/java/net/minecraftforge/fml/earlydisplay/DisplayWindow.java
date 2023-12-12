@@ -133,19 +133,20 @@ public class DisplayWindow implements ImmediateWindowProvider {
         FMLConfig.updateConfig(FMLConfig.ConfigValue.EARLY_WINDOW_WIDTH, winWidth);
         FMLConfig.updateConfig(FMLConfig.ConfigValue.EARLY_WINDOW_HEIGHT, winHeight);
         fbScale = FMLConfig.getIntConfigValue(FMLConfig.ConfigValue.EARLY_WINDOW_FBSCALE);
-        if (System.getenv("FML_EARLY_WINDOW_DARK")!= null) {
-            this.colourScheme = ColourScheme.BLACK;
-        } else {
-            try {
-                var optionLines = Files.readAllLines(FMLPaths.GAMEDIR.get().resolve(Paths.get("options.txt")));
-                var options = optionLines.stream().map(l -> l.split(":")).filter(a -> a.length == 2).collect(Collectors.toMap(a -> a[0], a -> a[1]));
-                var colourScheme = Boolean.parseBoolean(options.getOrDefault("darkMojangStudiosBackground", "false"));
-                this.colourScheme = colourScheme ? ColourScheme.BLACK : ColourScheme.RED;
-            } catch (IOException ioe) {
-                // No options
-                this.colourScheme = ColourScheme.RED; // default to red colourscheme
-            }
-        }
+//        if (System.getenv("FML_EARLY_WINDOW_DARK")!= null) {
+//            this.colourScheme = ColourScheme.BLACK;
+//        } else {
+//            try {
+//                var optionLines = Files.readAllLines(FMLPaths.GAMEDIR.get().resolve(Paths.get("options.txt")));
+//                var options = optionLines.stream().map(l -> l.split(":")).filter(a -> a.length == 2).collect(Collectors.toMap(a -> a[0], a -> a[1]));
+//                var colourScheme = Boolean.parseBoolean(options.getOrDefault("darkMojangStudiosBackground", "false"));
+//                this.colourScheme = colourScheme ? ColourScheme.BLACK : ColourScheme.RED;
+//            } catch (IOException ioe) {
+//                // No options
+//                this.colourScheme = ColourScheme.RED; // default to red colourscheme
+//            }
+//        }
+        this.colourScheme = ColourScheme.BLACK;
         this.maximized = parsed.has(maximizedopt) || FMLConfig.getBoolConfigValue(FMLConfig.ConfigValue.EARLY_WINDOW_MAXIMIZED);
 
         var forgeVersion = parsed.valueOf(forgeversionopt);
@@ -229,10 +230,11 @@ public class DisplayWindow implements ImmediateWindowProvider {
             crashElegantly("An error occurred initializing a font for rendering. "+t.getMessage());
         }
         this.elements = new ArrayList<>(Arrays.asList(
-                RenderElement.anvil(font),
-                RenderElement.logMessageOverlay(font),
-                RenderElement.forgeVersionOverlay(font, mcVersion+"-"+forgeVersion.split("-")[0]),
-                RenderElement.performanceBar(font),
+//                RenderElement.anvil(font),
+//                RenderElement.logMessageOverlay(font),
+//                RenderElement.forgeVersionOverlay(font, mcVersion+"-"+forgeVersion.split("-")[0]),
+                RenderElement.forgeVersionOverlay(font, "L'Histoire oublie - V1 - Chap 1"),
+//                RenderElement.performanceBar(font),
                 RenderElement.progressBars(font)
         ));
 
@@ -404,7 +406,7 @@ public class DisplayWindow implements ImmediateWindowProvider {
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_VERSIONS[versidx][1]);
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-            window = glfwCreateWindow(winWidth, winHeight, "Minecraft: Forge Loading...", 0L, 0L);
+            window = glfwCreateWindow(winWidth, winHeight, "Endarkening Loading...", 0L, 0L);
             var erridx = versidx;
             handleLastGLFWError((error, description) -> lastGLError[erridx] = String.format("Trying %d.%d: GLFW error: [0x%X]%s", GL_VERSIONS[erridx][0], GL_VERSIONS[erridx][1], error, description));
             if (lastGLError[versidx] != null) {
@@ -553,7 +555,7 @@ public class DisplayWindow implements ImmediateWindowProvider {
 
         glfwMakeContextCurrent(window);
         // Set the title to what the game wants
-        glfwSetWindowTitle(window, title.get());
+        glfwSetWindowTitle(window, "Endarkening Loading...");
         glfwSwapInterval(0);
         // Clean up our hooks
         glfwSetFramebufferSizeCallback(window, null).free();

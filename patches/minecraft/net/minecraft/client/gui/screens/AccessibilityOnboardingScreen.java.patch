@@ -1,0 +1,105 @@
+--- a/net/minecraft/client/gui/screens/AccessibilityOnboardingScreen.java
++++ b/net/minecraft/client/gui/screens/AccessibilityOnboardingScreen.java
+@@ -20,7 +_,7 @@
+ 
+ @OnlyIn(Dist.CLIENT)
+ public class AccessibilityOnboardingScreen extends Screen {
+-   private static final Component ONBOARDING_NARRATOR_MESSAGE = Component.translatable("accessibility.onboarding.screen.narrator");
++   private static final Component ONBOARDING_NARRATOR_MESSAGE = Component.translatable("menu_horror.warning.message");
+    private static final int PADDING = 4;
+    private static final int TITLE_PADDING = 16;
+    private final PanoramaRenderer panorama = new PanoramaRenderer(TitleScreen.CUBE_MAP);
+@@ -47,26 +_,44 @@
+       framelayout.defaultChildLayoutSetting().alignVerticallyTop().padding(4);
+       LinearLayout linearlayout = framelayout.addChild(LinearLayout.vertical());
+       linearlayout.defaultCellSetting().alignHorizontallyCenter().padding(2);
+-      this.textWidget = new FocusableTextWidget(this.width - 16, this.title, this.font);
++//      this.textWidget = new FocusableTextWidget(this.width - 16, this.title, this.font);
++
++      Component title_test = Component.nullToEmpty(
++              "Hey " + this.minecraft.getUser().getName() + ONBOARDING_NARRATOR_MESSAGE.getString()
++      );
++      this.textWidget = new FocusableTextWidget(this.width - 16, title_test, this.font);
++
+       linearlayout.addChild(this.textWidget, (p_296183_) -> {
+          p_296183_.paddingBottom(16);
+       });
+-      AbstractWidget abstractwidget = this.options.narrator().createButton(this.options, 0, 0, 150);
+-      abstractwidget.active = this.narratorAvailable;
+-      linearlayout.addChild(abstractwidget);
+-      if (this.narratorAvailable) {
+-         this.setInitialFocus(abstractwidget);
+-      }
+-
+-      linearlayout.addChild(CommonButtons.accessibility(150, (p_280782_) -> {
+-         this.closeAndSetScreen(new AccessibilityOptionsScreen(this, this.minecraft.options));
+-      }, false));
+-      linearlayout.addChild(CommonButtons.language(150, (p_280781_) -> {
+-         this.closeAndSetScreen(new LanguageSelectScreen(this, this.minecraft.options, this.minecraft.getLanguageManager()));
+-      }, false));
+-      framelayout.addChild(Button.builder(CommonComponents.GUI_CONTINUE, (p_267841_) -> {
+-         this.onClose();
+-      }).build(), framelayout.newChildLayoutSettings().alignVerticallyBottom().padding(8));
++//      AbstractWidget abstractwidget = this.options.narrator().createButton(this.options, 0, 0, 150);
++//      abstractwidget.active = this.narratorAvailable;
++//      linearlayout.addChild(abstractwidget);
++//      if (this.narratorAvailable) {
++//         this.setInitialFocus(abstractwidget);
++//      }
++
++      LinearLayout linearlayout_button = linearlayout.addChild(LinearLayout.horizontal());
++      linearlayout_button.defaultCellSetting().alignVerticallyMiddle().padding(2);
++
++      linearlayout_button.addChild(
++              Button.builder(Component.translatable("menu.quit"), (p_267841_) -> this.minecraft.stop()).build(),
++              framelayout.newChildLayoutSettings().alignVerticallyBottom().paddingLeft(8)
++      );
++
++      Button continueButton = Button.builder(CommonComponents.GUI_CONTINUE, (p_267841_) -> this.onClose()).build();
++      linearlayout_button.addChild(continueButton, framelayout.newChildLayoutSettings().alignVerticallyBottom());
++      this.setInitialFocus(continueButton);
++
++//      linearlayout.addChild(CommonButtons.accessibility(150, (p_280782_) -> {
++//         this.closeAndSetScreen(new AccessibilityOptionsScreen(this, this.minecraft.options));
++//      }, false));
++//      linearlayout.addChild(CommonButtons.language(150, (p_280781_) -> {
++//         this.closeAndSetScreen(new LanguageSelectScreen(this, this.minecraft.options, this.minecraft.getLanguageManager()));
++//      }, false));
++//      framelayout.addChild(Button.builder(CommonComponents.GUI_CONTINUE, (p_267841_) -> {
++//         this.onClose();
++//      }).build(), framelayout.newChildLayoutSettings().alignVerticallyBottom().padding(8));
+       framelayout.arrangeElements();
+       FrameLayout.alignInRectangle(framelayout, 0, i, this.width, this.height, 0.5F, 0.0F);
+       framelayout.visitWidgets(this::addRenderableWidget);
+@@ -80,15 +_,15 @@
+       this.close(this.onClose);
+    }
+ 
+-   private void closeAndSetScreen(Screen p_272914_) {
+-      this.close(() -> {
+-         this.minecraft.setScreen(p_272914_);
+-      });
+-   }
++//   private void closeAndSetScreen(Screen p_272914_) {
++//      this.close(() -> {
++//         this.minecraft.setScreen(p_272914_);
++//      });
++//   }
+ 
+    private void close(Runnable p_299263_) {
+-      this.options.onboardAccessibility = false;
+-      this.options.save();
++//      this.options.onboardAccessibility = false;
++//      this.options.save();
+       Narrator.getNarrator().clear();
+       p_299263_.run();
+    }
+@@ -113,7 +_,7 @@
+          if (this.timer < 40.0F) {
+             ++this.timer;
+          } else if (this.minecraft.isWindowActive()) {
+-            Narrator.getNarrator().say(ONBOARDING_NARRATOR_MESSAGE.getString(), true);
++            Narrator.getNarrator().say("Hey " + this.minecraft.getUser().getName() + Component.translatable("menu_horror.warning.narrator.message").getString(), true);
+             this.hasNarrated = true;
+          }
+       }

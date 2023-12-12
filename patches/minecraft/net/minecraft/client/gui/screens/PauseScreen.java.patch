@@ -1,10 +1,43 @@
 --- a/net/minecraft/client/gui/screens/PauseScreen.java
 +++ b/net/minecraft/client/gui/screens/PauseScreen.java
-@@ -88,6 +_,7 @@
-       } else {
-          gridlayout$rowhelper.addChild(this.openScreenButton(PLAYER_REPORTING, SocialInteractionsScreen::new));
-       }
-+      gridlayout$rowhelper.addChild(Button.builder(Component.translatable("fml.menu.mods"), button -> this.minecraft.setScreen(new net.minecraftforge.client.gui.ModListScreen(this))).width(BUTTON_WIDTH_FULL).build(), 2);
+@@ -78,16 +_,20 @@
+       }));
+       gridlayout$rowhelper.addChild(this.openLinkButton(SEND_FEEDBACK, SharedConstants.getCurrentVersion().isStable() ? "https://aka.ms/javafeedback?ref=game" : "https://aka.ms/snapshotfeedback?ref=game"));
+       (gridlayout$rowhelper.addChild(this.openLinkButton(REPORT_BUGS, "https://aka.ms/snapshotbugs?ref=game"))).active = !SharedConstants.getCurrentVersion().getDataVersion().isSideSeries();
+-      gridlayout$rowhelper.addChild(this.openScreenButton(OPTIONS, () -> {
+-         return new OptionsScreen(this, this.minecraft.options);
+-      }));
+-      if (this.minecraft.hasSingleplayerServer() && !this.minecraft.getSingleplayerServer().isPublished()) {
+-         gridlayout$rowhelper.addChild(this.openScreenButton(SHARE_TO_LAN, () -> {
+-            return new ShareToLanScreen(this);
+-         }));
+-      } else {
+-         gridlayout$rowhelper.addChild(this.openScreenButton(PLAYER_REPORTING, SocialInteractionsScreen::new));
+-      }
++      gridlayout$rowhelper.addChild(
++              Button.builder(OPTIONS, (p_280814_) -> {
++                 this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options));
++              }).width(204).build(),
++              2, gridlayout.newCellSettings()
++      );
++//      if (this.minecraft.hasSingleplayerServer() && !this.minecraft.getSingleplayerServer().isPublished()) {
++//         gridlayout$rowhelper.addChild(this.openScreenButton(SHARE_TO_LAN, () -> {
++//            return new ShareToLanScreen(this);
++//         }));
++//      } else {
++//         gridlayout$rowhelper.addChild(this.openScreenButton(PLAYER_REPORTING, SocialInteractionsScreen::new));
++//      }
++//      gridlayout$rowhelper.addChild(Button.builder(Component.translatable("fml.menu.mods"), button -> this.minecraft.setScreen(new net.minecraftforge.client.gui.ModListScreen(this))).width(BUTTON_WIDTH_FULL).build(), 2);
  
        Component component = this.minecraft.isLocalServer() ? RETURN_TO_MENU : CommonComponents.GUI_DISCONNECT;
        this.disconnectButton = gridlayout$rowhelper.addChild(Button.builder(component, (p_280815_) -> {
+@@ -115,7 +_,8 @@
+       } else if (serverdata != null && serverdata.isRealm()) {
+          this.minecraft.setScreen(new RealmsMainScreen(titlescreen));
+       } else {
+-         this.minecraft.setScreen(new JoinMultiplayerScreen(titlescreen));
++//         this.minecraft.setScreen(new JoinMultiplayerScreen(titlescreen));
++         this.minecraft.setScreen(titlescreen);
+       }
+ 
+    }
